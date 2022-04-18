@@ -5,6 +5,8 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <stdlib.h>
+#include <limits.h>
+
 int _printf(const char *format, ...);
 int _strlen(char *s)
   
