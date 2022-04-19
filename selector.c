@@ -20,7 +20,8 @@ int selector(int *i, const char *format, va_list x)
 		{"s", op_string},
 		{"%", op_percent},
 		{"d", op_numbers},
-		{"i", op_numbers}
+		{"i", op_numbers},
+		{NULL, NULL}
 	};
 
 	int c = 0;
