@@ -1,4 +1,5 @@
 #include "main.h"
+
 /**
 * _printf - main pritf function.
 * @format:A list of types of arguments passed to the function
@@ -11,14 +12,13 @@ int _printf(const char *format, ...)
 {
 	va_list x;
 	int i = 0, count = 0;
-	
+
 	va_start(x, format);
-	
-	if (!format || format[i] == '\n' || format[i] == '\0' || (format[i] == '%' && !format[i + 1]))
+	if (!format || format[i] == '\n' || format[i] == '\0' ||
+	    (format[i] == '%' && !format[i + 1]))
 	{
 		return (-1);
 	}
-	
 	while (format && format[i])
 	{
 		if (format[i] == '%')
