@@ -14,3 +14,39 @@ int selector(int *i, const char *format, va_list x)
     
   
   
+{
+	int count = 0;
+	int k = *i, l = 0;
+
+	base_t ops[] = {
+		{"c", op_char},
+		{"s", op_string},
+		{"%", op_percent},
+		{"d", op_numbers},
+		{"i", op_numbers}
+	};
+
+	int c = 0;
+
+	while (c < 10)
+	{
+		if (*(ops[c].op) == format[k + 1])
+		{
+			count += ops[c].f(x);
+			*i += 1;
+		}
+		else
+		{
+			l++;
+		}
+		c++;
+	}
+
+	if (l == 10)
+	{
+		_putchar(format[k]);
+		count++;
+	}
+
+	return (count);
+}
