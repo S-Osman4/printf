@@ -1,51 +1,54 @@
 #include "main.h"
 
 /**
- * _printf - formatted output conversion and print data.
- * @format: input string.
+ * _printf - Function that prints formatted output.
  *
- * Return: number of chars printed.
+ * @format: a string composed of zero or more characters to print or use as
+ * directives that handle subsequent arguments and special characters.
+ *
+ * Description: This function can take a variable number and type of arguments
+ * that should be printed to standard output.
+ *
+ * Return: int
  */
 int _printf(const char *format, ...)
 {
-	unsigned int i = 0, len = 0, ibuf = 0;
-	va_list arguments;
-	int (*function)(va_list, char *, unsigned int);
-	char *buffer;
+	va_list args;
+	int i = 0, chars_printed = 0;
 
-	va_start(arguments, format), buffer = malloc(sizeof(char) * 1024);
-	if (!format || !buffer || (format[i] == '%' && !format[i + 1]))
-		return (-1);
-	if (!format[i])
-		return (0);
-	for (i = 0; format && format[i]; i++)
+	va_start(args, format);
+	while (format && format[i])
 	{
-		if (format[i] == '%')
+		if (format[i] != '%')
 		{
-			if (format[i + 1] == '\0')
-			{	print_buf(buffer, ibuf), free(buffer), va_end(arguments);
-				return (-1);
-			}
-			else
-			{	function = get_print_func(format, i + 1);
-				if (function == NULL)
-				{
-					if (format[i + 1] == ' ' && !format[i + 2])
-						return (-1);
-					handl_buf(buffer, format[i], ibuf), len++, i--;
-				}
-				else
-				{
-					len += function(arguments, buffer, ibuf);
-					i += ev_print_func(format, i + 1);
-				}
-			} i++;
+			chars_printed += _putchar(format[i]);
 		}
-		else
-			handl_buf(buffer, format[i], ibuf), len++;
-		for (ibuf = len; ibuf > 1024; ibuf -= 1024)
-			;
+		else if (format[i + 1])
+		{
+			i++;
+			if (format[i] == 'c' || format[i] == 's')
+				chars_printed += format[i] == 'c' ? _putchar(va_arg(args, int)) :
+				print_string(va_arg(args, char *));
+			else if (format[i] == 'd' || format[i] == 'i')
+				chars_printed += print_num(va_arg(args, int));
+			else if (format[i] == 'b')
+				chars_printed += print_binary((unsigned int)va_arg(args, int));
+			else if (format[i] == 'r')
+				chars_printed += print_reverse(va_arg(args, char *));
+			else if (format[i] == 'R')
+				chars_printed += print_rot13(va_arg(args, char *));
+			else if (format[i] == 'o' || format[i] == 'u' ||
+			format[i] == 'x' || format[i] == 'X')
+				chars_printed += print_odh(format[i], (unsigned int)va_arg(args, int));
+			else if (format[i] == 'S')
+				chars_printed += print_S(va_arg(args, char *));
+			else if (format[i] == 'p')
+				chars_printed += print_pointer(va_arg(args, void *));
+			else
+				chars_printed += print_unknown_spec(format[i]);
+		}
+		i++;
 	}
-	print_buf(buffer, ibuf), free(buffer), va_end(arguments);
-	return (len);
+	va_end(args);
+	return (chars_printed);
 }
