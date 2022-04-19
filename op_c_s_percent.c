@@ -54,7 +54,7 @@ int op_percent(va_list __attribute__((unused)) p)
 
 /**
 * op_numbers - main function
-* @p: The argument pointer
+* @arg: The argument pointer
 * Description: This function prints Integrers and Decimals
 * Return: 0..
 */
@@ -74,10 +74,8 @@ int op_numbers(va_list arg)
 	{
 		i = n;
 	}
-	
 	p = 1;
 	r = i;
-	
 	while (r > 9)
 	{
 		p *= 10;
