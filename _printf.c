@@ -1,50 +1,128 @@
 #include "main.h"
 
 /**
- * _printf - Function that prints formatted output.
- *
- * @format: a string composed of zero or more characters to print or use as
- * directives that handle subsequent arguments and special characters.
- *
- * Description: This function can take a variable number and type of arguments
- * that should be printed to standard output.
- *
- * Return: int
+ * check_for_modifier - check if a string has a modifier
+ * @format: values to be printed
+ * Return: the index of the modifier or -1 if it is no specifier
  */
-int _printf(const char *format, ...)
+int check_for_modifier(const char *format)
 {
-	va_list args;
-	int i = 0, chars_printed = 0;
+	int i = 0;
 
-	va_start(args, format);
-	while (format && format[i])
+	while (*(format + i))
 	{
-		if (format[i] != '%')
-		{
-			i++;
-			if (format[i] == 'c' || format[i] == 's')
-				chars_printed += format[i] == 'c' ? _putchar(va_arg(args, int)) :
-				print_string(va_arg(args, char *));
-			else if (format[i] == 'd' || format[i] == 'i')
-				chars_printed += print_num(va_arg(args, int));
-			else if (format[i] == 'b')
-				chars_printed += print_binary((unsigned int)va_arg(args, int));
-			else if (format[i] == 'r')
-				chars_printed += print_reverse(va_arg(args, char *));
-			else if (format[i] == 'R')
-				chars_printed += print_rot13(va_arg(args, char *));
-			else if (format[i] == 'o' || format[i] == 'u' ||
-			format[i] == 'x' || format[i] == 'X')
-				chars_printed += print_odh(format[i], (unsigned int)va_arg(args, int));
-			else if (format[i] == 'S')
-				chars_printed += print_S(va_arg(args, char *));
-			else if (format[i] == 'p')
-				chars_printed += print_pointer(va_arg(args, void *));
-			else
-				chars_printed += print_unknown_spec(format[i]);
-		}
+		if (*(format + i) == '%' && *(format + i + 1))
+			switch (*(format + i + 1))
+			{
+				case 'b':
+				case 'c':
+				case 'd':
+				case 'i':
+				case 'o':
+				case 'S':
+				case 's':
+				case 'u':
+				case 'X':
+				case 'x':
+					return (i + 1);
+				case '%':
+					if (*(format + i + 2))
+					switch (*(format + i + 2))
+					{
+						case 'b':
+						case 'c':
+						case 'd':
+						case 'i':
+						case 'o':
+						case 'S':
+						case 's':
+						case 'u':
+						case 'X':
+						case 'x':
+							return (i + 2);
+						default:
+							return (i + 1);
+					}
+			}
 		i++;
 	}
-	va_end(args);
-	return (chars_printed);
+	return (-1);
+}
+
+/**
+  * _printf_count - produce output according to a format
+  * @format: a list of type of arguments passed to the function
+  * @count: the number of printed characters
+  * @ap: a va_list
+  * Return: the number of character printed
+  */
+int _printf_count(const char *format, int count, va_list ap)
+{
+	char *str;
+	int check, i;
+
+	if (!format)
+		return (count);
+
+	check = check_for_modifier(format);
+
+	if (check == -1)/*We haven't found specifier*/
+		return (_puts_count(format, count));
+	if (check >= 2)/*The string doesn't start whit he specifier*/
+		write(1, format, check - 1);
+
+	switch (*(format + check))
+	{
+		case 'b':
+		case 'o':
+		case 'u':
+		case 'x':
+		case 'X':
+			i = print_in_base(va_arg(ap, unsigned int),
+					*(format + check));
+			return (_printf_count((format + check + 1),
+						count + check + i - 1, ap));
+		case 'c':
+			_putchar(va_arg(ap, int));
+			return (_printf_count((format + check + 1),
+						count + check, ap));
+		case 'S':
+			str = va_arg(ap, char *);
+			i = _puts_special(str);
+			return (_printf_count((format + check + 1),
+						count + check + i - 1, ap));
+		case 's':
+			str = va_arg(ap, char *);
+			i = _puts_count(str, 0);
+			return (_printf_count((format + check + 1),
+						count + check + i - 1, ap));
+		case '%':
+			_putchar('%');
+			return (_printf_count((format + check + 1),
+						count + check, ap));
+		case 'i':
+		case 'd':
+			i = print_number(va_arg(ap, int));
+			return (_printf_count((format + check + 1),
+						count + check + i - 1, ap));
+		default:/*here the modifier is not a char nor a string*/
+			return (_printf_count((format + check),
+					      count + check, ap));
+	}
+}
+/**
+  * _printf - produce output according to a format
+  * @format: a list of type of arguments passed to the function
+  * @...: the list of argument to print
+  * Return: the number of character printed
+  */
+int _printf(const char *format, ...)
+{
+va_list ap;
+int count;
+va_start(ap, format);
+count = _printf_count(format, 0, ap);
+va_end(ap);
+return (count);
+
 }
