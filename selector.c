@@ -9,10 +9,7 @@
 * asked by the user for calls it
 * Return: The total number of characters of the functions called.
 */
-int selector(int *i, const char *format, va_list x)
-
-    
-  
+int selector(int *i, const char *format, va_list x) 
   
 {
 	int count = 0;
