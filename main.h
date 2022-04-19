@@ -7,18 +7,25 @@
 #include <stdlib.h>
 
 /*Prototypes*/
+/**
+ *struct print_func - struct to select specific print function
+ *@print_ft: format specifier
+ *@p_func: pinter to function
+ */
+typedef struct print_func
+{
+	char print_ft;
+	int (*p_func)(va_list l);
+} pr_f;
 int _printf(const char *format, ...);
-int print_num(long int n);
-int print_string(char *str);
-int print_binary(unsigned int num);
-int print_unknown_spec(char c);
-int print_odh(char c, unsigned int num);
-int dec_to_oct(unsigned int num);
-int dec_to_hex(char c, unsigned int num);
-int print_S(char *);
-int print_reverse(char *s);
-int print_rot13(char *c);
-int print_pointer(void *p);
+int _puts(const char *);
+void check_for_modifiers(const char *, va_list, int *, int *);
+int check_for_modifier(const char *format);
+int _puts_count(const char *, int);
+int print_number(int);
+int print_in_base(unsigned long int, char);
+int _puts_special(const char *);
+int print_num_up_to_10(int, int, char);
 
 /*Auxilliary Prototype*/
 int _putchar(char c);
