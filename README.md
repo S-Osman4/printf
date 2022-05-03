@@ -1,45 +1,104 @@
-# printf team project
-The printf project is a collaboration between Shamso Osman and Jenipher Ogara, currently students of Software Engineering at ALX. The function named "_printf" imitates the actual "printf" command located in the stdio.h library. It contains some of the basic features and functions found in the manual 3 of "printf".
+# printf
 
-_printf() is a function that performs formatted output conversion and print data. Its prototype is the following:
+This project contains a mini version of the **printf** function
+that we can find in the library <stdio.h>,
+if we are using the **C programming language.**
+The **printf** function basically allows us to print any argument
+given to standard or terminal output. This means that we can print
+any combination of strings, integers, and other different data types.
 
-int _printf(const char *format, ...)
+## Synopsis ##
+In this repository you can find all the code necessary for our
+custom printf function to run.
+Our mini version currently handles conversion specifiers: *c, s,%, d, i*,
+and does not yet support field width, precision, markup, or length modifiers.
 
-Where format contains the string that is printed. As _printf() is variadic function, it can receives n arguments that replace by n tags written inside the string.
+## How To Install & Compile ##
+To have this repository and its content, you must execute the following on
+your terminal:
+~~~
+$ git clone https://github.com/S-Osman4/printf.git
+$ cd printf
+~~~
 
-The format tags prototype is the following:
+To compile you need a main program, as you wish ... for example:
+~~~
+int main(void)
+{
+       _printf("%s %c%drld", "Hello", "W", 0);
+       return(0);
+}
+~~~
+And execute the following in your terminal:
+~~~
+$ gcc -Wall -Werror -Wextra -pedantic -Wno-format *.c -o a
+$ ./a
+Hello W0rld
+$
+~~~
 
-%[flags][length]specifier
+## Description of the files contained. ##
 
-Examples
-Printing the string of chars "Hello, Holberton":
+| File  name   | Description   |
+| ------------- |:-------------:|
+| holberton.h | Header file, contains the prototypes of the functions used that can be found in the other files. |
+| printf.c      | Contains the _printf function.|
+| selector.c    | Contains the function that selects the correct  function requested by the user. |
+| basic_op.c    | Contains the functions that allow printing basic  formats (%c, %s, %d, %i, %%).|
+| advanced_op.c | Contains advanced printing functions (Unsigned; %u, reverse; %r, rot13; %R, octal; %o, binary; %b).|
+| auxiliar_op.c | Contains the auxiliary _putchar function, used to print.|
+|man_3_printf   | Custom manual for our _printf function.|
 
-Use: _printf("Hello Hol%s.", "berton");
-Output: Hello Holberton.
-Printing an integer number:
+### Note ###
+If you want to review the manual of our _printf function you can execute
+in your terminal:
+~~~
+$ man ./man_3_printf
+~~~
+## Formats ##
+* %c: This type of format is used to represent a character
+* %s: This type of format is used to represent a string of characters
+* %d or %i: This type of format is used to represent base 10
+signed integer (int)
+* %%: In this case, the character% is printed
+* %u: Unsigned decimal notation
+* %r: Reverse a string notation
+* %R: This format prints a string in rot13 notation
+* %o: Unsigned base 8 integer (int)
+* %b: This format refers to binary number.
 
-Use: _printf("10 + 10 is equal to %d.", 20);
-Output: 10 + 10 is equal to 20.
-Printing a binary, octal and hexadecimal:
+##### EXAMPLES #####
+Here are some examples of how the _printf function works:
 
-Use: _printf("10 in binary is [%b], in octal is [%o] and in hexadecimal is [%x]", 5, 5, 5);
-Output: 10 in binary is [1010], in octal is [12] and in hexadecimal is [A]
-Printing a string codified in ROT13:
+- _printf("char: [%c]\n", 'H');
+  + Output: char: [H]
 
-Use: _printf("Hello in ROT13 is %R", "Hello");
-Output: Hello in ROT13 is Urybb
-Using flags and length tags:
+- _printf("string: [%s]\n", "Hello people !");
+  + Output: string: [Hello people !]
 
-Printing the string of chars "Hello, Holberton":
+- _printf("integer: [%i]\n", 26);
+  + Output: integer: [26]
 
-Use: _printf("2 * 2 = %+d and 5 * -5 = %+i", 4, -25);
-Output: 2 * 2 = +4 and 5 * -5 = -25
-Printing a long integer number and short integer number:
+- _printf("decimal: [%d]\n", 10000);
+  + Output: decimal: [10000]
 
-Use: _printf("1 million as a long int is %ld, but as a short int is %hd", 1000000, 1000000);
-Output: 1 million as a long int is 1000000, but as a short int is 16960
+- _printf("octal [%o]\n", 92);
+  + Output: octal [134]
 
+- _printf("Percent: [%%%%]\n");
+  + Output: Percent: [%%]
 
-Authors: Shamso and Jenipher
+- _printf("Reverse: [%r]\n", "Programming is great!");
+  + Output: Reverse: [!taerg si gnimmargorP]
+  
+## Environment ##
+* Language: C
+* OS: Ubuntu 14.04 LTS
+* Compiler: gcc 4.8.4
+* Style guidelines: [Betty style](https://github.com/holbertonschool/Betty/wiki)
+and
+[Betty-doc](https://github.com/holbertonschool/Betty/blob/master/betty-doc.pl)
+### Authors ###
+1. :octocat: [Shamso Osman](https://github.com/S-Osman4)
 
-END
+2. :octocat:[Jenipher Ogara](https://github.com/Morr-O)
